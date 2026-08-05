@@ -4,7 +4,7 @@
   "description": "E-commerce app",
   "license": "ISC",
   "author": "Emil Magdy",
-  "type": "module",
+  "type": "commonjs",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@prisma/client": "^7.9.1",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1"
   },
