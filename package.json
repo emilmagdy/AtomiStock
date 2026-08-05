@@ -4,7 +4,7 @@
   "description": "E-commerce app",
   "license": "ISC",
   "author": "Emil Magdy",
-  "type": "commonjs",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -17,6 +17,7 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "@types/node": "^26.1.2",
     "nodemon": "^3.1.14",
     "prisma": "^7.9.1"
   }
