@@ -4,7 +4,7 @@
   "description": "E-commerce app",
   "license": "ISC",
   "author": "Emil Magdy",
-  "type": "commonjs",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
