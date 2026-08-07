@@ -1,4 +1,4 @@
-import prisma from '../generated/prisma/client.js'
+import prisma from '../utils/prisma.js'
 
 import bcrypt from 'bcrypt'
 
@@ -7,7 +7,7 @@ export const userRegistration = async (req, res) => {
         
     const { name, email, password } = req.body
     // check if the user exists in the db
-    const userExists = await prisma.user.findUnique({
+    const userExists = await prisma.User.findUnique({
         where: { email: email }
     })
     if (userExists) {
@@ -15,6 +15,7 @@ export const userRegistration = async (req, res) => {
     }
     return res.json({ "message": "still not finished" })
 }   catch (err) {
+    console.log(err)
 return res.status(500).json({"error":"error occured"})
 }}
 
