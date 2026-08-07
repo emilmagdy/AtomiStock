@@ -1,5 +1,8 @@
+import { PrismaNeon } from '@prisma/adapter-neon'
 import { PrismaClient}  from '../generated/prisma/client.js'
 
-const prisma = new PrismaClient()
 
-export default prisma
+const adapter = new PrismaNeon({ connectionString : process.env.DATABASE_URL })
+
+
+export const prisma = new PrismaClient({ adapter })
