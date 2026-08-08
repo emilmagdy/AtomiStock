@@ -12,12 +12,18 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
 model User {
-  id           Int     @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   name         String
-  email        String
+  email        String   @unique
   passwordHash String
-  role         String
+  role         Role     @default(CUSTOMER)
+  createdAt    DateTime @default(now())
   orders       Order[]
 }
 
