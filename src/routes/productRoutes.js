@@ -21,7 +21,7 @@ router.post("/add",
     roleAutherization("ADMIN"),
     addProductController)
 
-router.put("/:id",
+router.patch("/:id",
     tokenVerification,
     roleAutherization("ADMIN"),
     editProductController

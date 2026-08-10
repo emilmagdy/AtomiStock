@@ -28,24 +28,24 @@ model User {
 }
 
 model Product {
-  id             Int             @id @default(autoincrement())
-  name           String
-  vendor         String
-  unitPrice      Decimal         @map("unit_price")
-  addedAt        DateTime        @default(now()) @map("added_at")
-  InventoryItems InventoryItem[]
-  OrderItems     OrderItem[]
+  id           Int          @id @default(autoincrement())
+  name         String
+  vendor       String
+  unitPrice    Decimal      @map("unit_price")
+  addedAt      DateTime     @default(now()) @map("added_at")
+  stockBatches StockBatch[]
+  orderItems   OrderItem[]
 }
 
 model Order {
   id         Int         @id @default(autoincrement())
   userId     Int         @map("user_id")
-  createdAt  DateTime
-  OrderItems OrderItem[]
+  createdAt  DateTime    @default(now())
+  orderItems OrderItem[]
   user       User        @relation(fields: [userId], references: [id])
 }
 
-model InventoryItem {
+model StockBatch {
   id        Int      @id @default(autoincrement())
   productId Int      @map("product_id")
   quantity  Int
