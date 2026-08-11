@@ -28,13 +28,14 @@ model User {
 }
 
 model Product {
-  id           Int          @id @default(autoincrement())
-  name         String
-  vendor       String
-  unitPrice    Decimal      @map("unit_price")
-  addedAt      DateTime     @default(now()) @map("added_at")
-  stockBatches StockBatch[]
-  orderItems   OrderItem[]
+  id            Int          @id @default(autoincrement())
+  name          String
+  vendor        String
+  unitPrice     Decimal      @map("unit_price") @db.Decimal(10, 2)
+  stockQuantity Int          @default(0) @map("stock_quantity")
+  addedAt       DateTime     @default(now()) @map("added_at")
+  stockBatches  StockBatch[]
+  orderItems    OrderItem[]
 }
 
 model Order {
@@ -57,7 +58,7 @@ model OrderItem {
   id        Int     @id @default(autoincrement())
   orderId   Int     @map("order_id")
   productId Int     @map("product_id")
-  unitPrice Decimal @map("unit_price")
+  unitPrice Decimal @map("unit_price") @db.Decimal(10, 2)
   quantity  Int
   order     Order   @relation(fields: [orderId], references: [id])
   product   Product @relation(fields: [productId], references: [id])

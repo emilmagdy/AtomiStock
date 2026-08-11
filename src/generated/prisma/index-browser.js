@@ -134,6 +134,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   name: 'name',
   vendor: 'vendor',
   unitPrice: 'unitPrice',
+  stockQuantity: 'stockQuantity',
   addedAt: 'addedAt'
 };
 

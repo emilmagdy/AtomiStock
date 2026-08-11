@@ -2513,11 +2513,13 @@ export namespace Prisma {
   export type ProductAvgAggregateOutputType = {
     id: number | null
     unitPrice: Decimal | null
+    stockQuantity: number | null
   }
 
   export type ProductSumAggregateOutputType = {
     id: number | null
     unitPrice: Decimal | null
+    stockQuantity: number | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -2525,6 +2527,7 @@ export namespace Prisma {
     name: string | null
     vendor: string | null
     unitPrice: Decimal | null
+    stockQuantity: number | null
     addedAt: Date | null
   }
 
@@ -2533,6 +2536,7 @@ export namespace Prisma {
     name: string | null
     vendor: string | null
     unitPrice: Decimal | null
+    stockQuantity: number | null
     addedAt: Date | null
   }
 
@@ -2541,6 +2545,7 @@ export namespace Prisma {
     name: number
     vendor: number
     unitPrice: number
+    stockQuantity: number
     addedAt: number
     _all: number
   }
@@ -2549,11 +2554,13 @@ export namespace Prisma {
   export type ProductAvgAggregateInputType = {
     id?: true
     unitPrice?: true
+    stockQuantity?: true
   }
 
   export type ProductSumAggregateInputType = {
     id?: true
     unitPrice?: true
+    stockQuantity?: true
   }
 
   export type ProductMinAggregateInputType = {
@@ -2561,6 +2568,7 @@ export namespace Prisma {
     name?: true
     vendor?: true
     unitPrice?: true
+    stockQuantity?: true
     addedAt?: true
   }
 
@@ -2569,6 +2577,7 @@ export namespace Prisma {
     name?: true
     vendor?: true
     unitPrice?: true
+    stockQuantity?: true
     addedAt?: true
   }
 
@@ -2577,6 +2586,7 @@ export namespace Prisma {
     name?: true
     vendor?: true
     unitPrice?: true
+    stockQuantity?: true
     addedAt?: true
     _all?: true
   }
@@ -2672,6 +2682,7 @@ export namespace Prisma {
     name: string
     vendor: string
     unitPrice: Decimal
+    stockQuantity: number
     addedAt: Date
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
@@ -2699,6 +2710,7 @@ export namespace Prisma {
     name?: boolean
     vendor?: boolean
     unitPrice?: boolean
+    stockQuantity?: boolean
     addedAt?: boolean
     stockBatches?: boolean | Product$stockBatchesArgs<ExtArgs>
     orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
@@ -2710,6 +2722,7 @@ export namespace Prisma {
     name?: boolean
     vendor?: boolean
     unitPrice?: boolean
+    stockQuantity?: boolean
     addedAt?: boolean
   }, ExtArgs["result"]["product"]>
 
@@ -2718,6 +2731,7 @@ export namespace Prisma {
     name?: boolean
     vendor?: boolean
     unitPrice?: boolean
+    stockQuantity?: boolean
     addedAt?: boolean
   }, ExtArgs["result"]["product"]>
 
@@ -2726,10 +2740,11 @@ export namespace Prisma {
     name?: boolean
     vendor?: boolean
     unitPrice?: boolean
+    stockQuantity?: boolean
     addedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "vendor" | "unitPrice" | "addedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "vendor" | "unitPrice" | "stockQuantity" | "addedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     stockBatches?: boolean | Product$stockBatchesArgs<ExtArgs>
     orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
@@ -2749,6 +2764,7 @@ export namespace Prisma {
       name: string
       vendor: string
       unitPrice: Prisma.Decimal
+      stockQuantity: number
       addedAt: Date
     }, ExtArgs["result"]["product"]>
     composites: {}
@@ -3179,6 +3195,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Product", 'String'>
     readonly vendor: FieldRef<"Product", 'String'>
     readonly unitPrice: FieldRef<"Product", 'Decimal'>
+    readonly stockQuantity: FieldRef<"Product", 'Int'>
     readonly addedAt: FieldRef<"Product", 'DateTime'>
   }
     
@@ -6988,6 +7005,7 @@ export namespace Prisma {
     name: 'name',
     vendor: 'vendor',
     unitPrice: 'unitPrice',
+    stockQuantity: 'stockQuantity',
     addedAt: 'addedAt'
   };
 
@@ -7202,6 +7220,7 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     vendor?: StringFilter<"Product"> | string
     unitPrice?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFilter<"Product"> | number
     addedAt?: DateTimeFilter<"Product"> | Date | string
     stockBatches?: StockBatchListRelationFilter
     orderItems?: OrderItemListRelationFilter
@@ -7212,6 +7231,7 @@ export namespace Prisma {
     name?: SortOrder
     vendor?: SortOrder
     unitPrice?: SortOrder
+    stockQuantity?: SortOrder
     addedAt?: SortOrder
     stockBatches?: StockBatchOrderByRelationAggregateInput
     orderItems?: OrderItemOrderByRelationAggregateInput
@@ -7225,6 +7245,7 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     vendor?: StringFilter<"Product"> | string
     unitPrice?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFilter<"Product"> | number
     addedAt?: DateTimeFilter<"Product"> | Date | string
     stockBatches?: StockBatchListRelationFilter
     orderItems?: OrderItemListRelationFilter
@@ -7235,6 +7256,7 @@ export namespace Prisma {
     name?: SortOrder
     vendor?: SortOrder
     unitPrice?: SortOrder
+    stockQuantity?: SortOrder
     addedAt?: SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
@@ -7251,6 +7273,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Product"> | string
     vendor?: StringWithAggregatesFilter<"Product"> | string
     unitPrice?: DecimalWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntWithAggregatesFilter<"Product"> | number
     addedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
   }
 
@@ -7484,6 +7507,7 @@ export namespace Prisma {
     name: string
     vendor: string
     unitPrice: Decimal | DecimalJsLike | number | string
+    stockQuantity?: number
     addedAt?: Date | string
     stockBatches?: StockBatchCreateNestedManyWithoutProductInput
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
@@ -7494,6 +7518,7 @@ export namespace Prisma {
     name: string
     vendor: string
     unitPrice: Decimal | DecimalJsLike | number | string
+    stockQuantity?: number
     addedAt?: Date | string
     stockBatches?: StockBatchUncheckedCreateNestedManyWithoutProductInput
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
@@ -7503,6 +7528,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     vendor?: StringFieldUpdateOperationsInput | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     stockBatches?: StockBatchUpdateManyWithoutProductNestedInput
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
@@ -7513,6 +7539,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     vendor?: StringFieldUpdateOperationsInput | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     stockBatches?: StockBatchUncheckedUpdateManyWithoutProductNestedInput
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
@@ -7523,6 +7550,7 @@ export namespace Prisma {
     name: string
     vendor: string
     unitPrice: Decimal | DecimalJsLike | number | string
+    stockQuantity?: number
     addedAt?: Date | string
   }
 
@@ -7530,6 +7558,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     vendor?: StringFieldUpdateOperationsInput | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7538,6 +7567,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     vendor?: StringFieldUpdateOperationsInput | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7862,12 +7892,14 @@ export namespace Prisma {
     name?: SortOrder
     vendor?: SortOrder
     unitPrice?: SortOrder
+    stockQuantity?: SortOrder
     addedAt?: SortOrder
   }
 
   export type ProductAvgOrderByAggregateInput = {
     id?: SortOrder
     unitPrice?: SortOrder
+    stockQuantity?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -7875,6 +7907,7 @@ export namespace Prisma {
     name?: SortOrder
     vendor?: SortOrder
     unitPrice?: SortOrder
+    stockQuantity?: SortOrder
     addedAt?: SortOrder
   }
 
@@ -7883,12 +7916,14 @@ export namespace Prisma {
     name?: SortOrder
     vendor?: SortOrder
     unitPrice?: SortOrder
+    stockQuantity?: SortOrder
     addedAt?: SortOrder
   }
 
   export type ProductSumOrderByAggregateInput = {
     id?: SortOrder
     unitPrice?: SortOrder
+    stockQuantity?: SortOrder
   }
 
   export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -8649,6 +8684,7 @@ export namespace Prisma {
     name: string
     vendor: string
     unitPrice: Decimal | DecimalJsLike | number | string
+    stockQuantity?: number
     addedAt?: Date | string
     orderItems?: OrderItemCreateNestedManyWithoutProductInput
   }
@@ -8658,6 +8694,7 @@ export namespace Prisma {
     name: string
     vendor: string
     unitPrice: Decimal | DecimalJsLike | number | string
+    stockQuantity?: number
     addedAt?: Date | string
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutProductInput
   }
@@ -8682,6 +8719,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     vendor?: StringFieldUpdateOperationsInput | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: OrderItemUpdateManyWithoutProductNestedInput
   }
@@ -8691,6 +8729,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     vendor?: StringFieldUpdateOperationsInput | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     orderItems?: OrderItemUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -8715,6 +8754,7 @@ export namespace Prisma {
     name: string
     vendor: string
     unitPrice: Decimal | DecimalJsLike | number | string
+    stockQuantity?: number
     addedAt?: Date | string
     stockBatches?: StockBatchCreateNestedManyWithoutProductInput
   }
@@ -8724,6 +8764,7 @@ export namespace Prisma {
     name: string
     vendor: string
     unitPrice: Decimal | DecimalJsLike | number | string
+    stockQuantity?: number
     addedAt?: Date | string
     stockBatches?: StockBatchUncheckedCreateNestedManyWithoutProductInput
   }
@@ -8770,6 +8811,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     vendor?: StringFieldUpdateOperationsInput | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     stockBatches?: StockBatchUpdateManyWithoutProductNestedInput
   }
@@ -8779,6 +8821,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     vendor?: StringFieldUpdateOperationsInput | string
     unitPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stockQuantity?: IntFieldUpdateOperationsInput | number
     addedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     stockBatches?: StockBatchUncheckedUpdateManyWithoutProductNestedInput
   }

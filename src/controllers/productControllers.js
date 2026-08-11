@@ -1,8 +1,5 @@
 import prisma from '../utils/prisma.js'
 import AppError from '../utils/AppError.js'
-import { PassThrough } from 'node:stream'
-import { appendFile } from 'node:fs'
-
 
 export const addProductController = async (req, res) => {
     // Get the required fields fro the req body
