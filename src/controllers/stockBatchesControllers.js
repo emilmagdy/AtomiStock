@@ -6,13 +6,19 @@ export const addStockBatchController = async (req, res) => {
     const productId = Number(req.body.productId)
     const quantity = Number(req.body.quantity)
 
-    if (isNaN(productId) || isNaN(quantity) || quantity < 0 || Number.isInteger(quantity)) {
-        throw new AppError("Product id and quantity must be a number", 400)
+    if (isNaN(productId) || isNaN(quantity) || quantity <= 0 || !Number.isInteger(quantity)) {
+        throw new AppError("Product id and quantity must be positive integer", 400)
     }
 
     // Create a prisma transaction to  handle the atomic operation of the stock addition
     const result = await prisma.$transaction(async (tx) => {
-
+        // Verify that the product exists 
+        const product = await tx.product.findUnique({
+            where: { id: productId }
+        })
+        if (!product) {
+            throw new AppError("Product not found", 404)
+        }
 
         // Add the new stockBatch to the db
         const addedStockBatch = await tx.stockBatch.create({
@@ -45,19 +51,26 @@ export const deleteStockBatchController = async (req, res) => {
     const stockBatchId = Number(req.params.id)
 
     // Validate that the stockbatch id passed into the URL is a number
-    if (isNaN(stockBatchId) || stockBatchId < 0) {
+    if (isNaN(stockBatchId) || stockBatchId <= 0) {
         throw new AppError("invalid stockBatch id parameter in the URL", 400)
-    }
-
-    const batchExists = await prisma.stockBatch.findUnique({
-        where: { id: stockBatchId }
-    })
-    if (!batchExists) {
-        throw new AppError('Batch does not exist', 404)
     }
 
     // Create a prisma transaction to  handle the atomic operation of the stock deduction
     const result = await prisma.$transaction(async (tx) => {
+        //Ensure the existance of the batch we wanto delete
+        const batchExists = await tx.stockBatch.findUnique({
+            where: { id: stockBatchId }
+        })
+        if (!batchExists) {
+            throw new AppError('Batch does not exist', 404)
+        }
+        // Check if tth deducted quanity will drop the product stock  quanityt below zero
+        const product = await tx.product.findUnique({
+            where: { id: batchExists.productId }
+        })
+        if (!product || product.stockQuantity < batchExists.quantity) {
+            throw new AppError("Cannot delete batch, stock will drop below zero", 400)
+        }
         // Delete the record from the db
         const deletedBatch = await tx.stockBatch.delete({
             where: { id: stockBatchId }

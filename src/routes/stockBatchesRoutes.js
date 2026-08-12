@@ -1,11 +1,11 @@
-import express from 'espress'
-const router = express.route()
+import express from 'express'
+const router = express.Router()
 import {
     addStockBatchController,
     deleteStockBatchController,
     getALLStockBatchesController,
     getStockBatchesForProductController
-} from '../controllers/stockBatchesControllers'
+} from '../controllers/stockBatchesControllers.js'
 
 router.post("/add", addStockBatchController)
 
