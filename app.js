@@ -11,7 +11,7 @@ import { errorHandler } from './src/middleware/errorHandler.js'
 app.use(express.json())
 app.use("/users", userRoutes)
 app.use("/products", productRoutes)
-app.use("stock-batches", stockBatchedRoutes)
+app.use("/stock-batches", stockBatchedRoutes)
 app.use(errorHandler)
 
 app.listen(PORT, () => {

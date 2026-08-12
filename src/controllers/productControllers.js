@@ -138,6 +138,3 @@ export const deleteProductController = async (req, res) => {
         product: productExists
     })
 }
-
-
-
