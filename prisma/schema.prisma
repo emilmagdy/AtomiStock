@@ -17,14 +17,22 @@ enum Role {
   ADMIN
 }
 
+enum OrderStatus {
+  COMPLETED
+  PENDING
+  CANCELED
+}
+
 model User {
   id           Int      @id @default(autoincrement())
   name         String
   email        String   @unique
-  passwordHash String
+  passwordHash String   @map("passsword_hash")
   role         Role     @default(CUSTOMER)
   createdAt    DateTime @default(now())
   orders       Order[]
+
+  @@map("users")
 }
 
 model Product {
@@ -36,14 +44,20 @@ model Product {
   addedAt       DateTime     @default(now()) @map("added_at")
   stockBatches  StockBatch[]
   orderItems    OrderItem[]
+
+  @@map("products")
 }
 
 model Order {
-  id         Int         @id @default(autoincrement())
-  userId     Int         @map("user_id")
-  createdAt  DateTime    @default(now())
-  orderItems OrderItem[]
-  user       User        @relation(fields: [userId], references: [id])
+  id          Int         @id @default(autoincrement())
+  userId      Int         @map("user_id")
+  totalAmount Decimal     @map("total_amount") @db.Decimal(10, 2)
+  orderStatus OrderStatus @default(PENDING) @map("order_status")
+  createdAt   DateTime    @default(now())
+  orderItems  OrderItem[]
+  user        User        @relation(fields: [userId], references: [id])
+
+  @@map("orders")
 }
 
 model StockBatch {
@@ -52,6 +66,8 @@ model StockBatch {
   quantity  Int
   addedAt   DateTime @default(now()) @map("added_at")
   product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("stock_batches")
 }
 
 model OrderItem {
@@ -60,6 +76,8 @@ model OrderItem {
   productId Int     @map("product_id")
   unitPrice Decimal @map("unit_price") @db.Decimal(10, 2)
   quantity  Int
-  order     Order   @relation(fields: [orderId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
 }
