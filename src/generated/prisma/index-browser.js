@@ -141,6 +141,8 @@ exports.Prisma.ProductScalarFieldEnum = {
 exports.Prisma.OrderScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  totalAmount: 'totalAmount',
+  orderStatus: 'orderStatus',
   createdAt: 'createdAt'
 };
 
@@ -171,6 +173,12 @@ exports.Prisma.QueryMode = {
 exports.Role = exports.$Enums.Role = {
   CUSTOMER: 'CUSTOMER',
   ADMIN: 'ADMIN'
+};
+
+exports.OrderStatus = exports.$Enums.OrderStatus = {
+  COMPLETED: 'COMPLETED',
+  PENDING: 'PENDING',
+  CANCELED: 'CANCELED'
 };
 
 exports.Prisma.ModelName = {
