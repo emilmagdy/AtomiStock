@@ -94,16 +94,16 @@ JWT_SECRET="your_secure_jwt_secret"
 
 3. Setup Commands
 Bash
-# Install dependencies
+### Install dependencies
 npm install
 
-# Run database migrations
+### Run database migrations
 npx prisma migrate dev --name init
 
-# Generate Prisma Client
+### Generate Prisma Client
 npx prisma generate
 
-# Start the development server
+### Start the development server
 npm run dev
 
 ## Key Implementation Highlights
