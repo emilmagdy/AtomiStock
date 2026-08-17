@@ -136,7 +136,7 @@ export const getOrderById = async (req, res) => {
 
     // Get the order id from the URL parameters
     const orderId = Number(req.params.id)
-    if (!orderId || !typeof (orderId) === Number) {
+    if (!orderId || isNaN(orderId)) {
         throw new AppError("Invalid Id prameter", 400)
     }
 
@@ -148,29 +148,22 @@ export const getOrderById = async (req, res) => {
     if (!orderSummary) {
         throw new AppError("No order with such ID present", 404)
     }
-    console.log(`orderSummary ${orderSummary}`)
 
     // Get an array of all items in the specified order 
     const orderItems = await prisma.orderItem.findMany({
         where: { orderId }
     })
-    console.log(`order Items : ${orderItems}`)
     const productIds = orderItems.map(i => i.productId)
-    console.log(`product ids ${productIds}`)
     const orderProducts = await prisma.product.findMany({
         where: { id: { in: productIds } }
     })
     const productMap = new Map(orderProducts.map(p => [p.id, p]))
+    // create a new array with the details of all items
     const orderItemsDetails = []
-
-    console.log(`product Map ${productMap}`)
-
 
     for (const item of orderItems) {
         const productId = item.productId
-        console.log(`productId ${productId}`)
         const product = productMap.get(productId)
-        console.log(`product ${product}`)
         orderItemsDetails.push({
             productId,
             name: product.name,
@@ -184,5 +177,75 @@ export const getOrderById = async (req, res) => {
         message: `Order no. ${orderId}`,
         orderSummary,
         orderItemsDetails
+    })
+}
+
+export const cancelOrdersController = async (req, res) => {
+    // Get the user id from the request body
+    const user = req.user
+    if (!user || !user.id) {
+        throw new AppError("Autherization required, please login ", 401)
+    }
+    // Get the order id from the URL parameters
+    const orderIdparam = req.params.id
+    if (!orderIdparam || isNaN(orderIdparam)) {
+        throw new AppError("Invalid Id prameter", 400)
+    }
+    const orderId = Number(orderIdparam)
+
+
+    const result = await prisma.$transaction(async (tx) => {
+        // Get the order and validate its status
+        const order = await tx.order.findUnique({
+            where: { id: orderId },
+            include: { orderItems: true }
+        })
+        if (!order) {
+            throw new AppError("No order with such ID present", 404)
+        }
+        if (order.orderStatus !== "PENDING") {
+            throw new AppError("This order cannot be cancelled", 400)
+        }
+
+        // Check ownership
+        if (order.userId !== user.id && user.role !== "ADMIN") {
+            throw new AppError("You cant cancel this order", 403)
+        }
+
+        // Create a new stockBatches array for the restored items
+        const stockBaatchesData = []
+
+        // Iterate over the items to update product stocks and create restored stock batches
+        for (const item of order.orderItems) {
+            // Increment the product stock quantity
+            await tx.product.update({
+                where: { id: item.productId },
+                data: { stockQuantity: { increment: item.quantity } }
+            })
+            // Create a stock batch for that item
+            stockBaatchesData.push({
+                productId: item.productId,
+                quantity: item.quantity
+            })
+        }
+        // create the stock batches
+        const createdBatches = await tx.stockBatch.createManyAndReturn({
+            data: stockBaatchesData
+        })
+
+        // Delete the order 
+        const deletedOrder = await tx.order.update({
+            where: { id: orderId },
+            data: { orderStatus: "CANCELED" }
+        }
+        )
+        return { createdBatches, deletedOrder }
+
+    })
+
+    return res.status(200).json({
+        message: `Order ${orderId} deleted successfully`,
+        deletedOrder: result.deletedOrder,
+        createdBatches: result.createdBatches
     })
 }

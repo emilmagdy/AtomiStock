@@ -7,7 +7,7 @@ import {
     getStockBatchesForProductController
 } from '../controllers/stockBatchesControllers.js'
 
-router.post("/add", addStockBatchController)
+router.post("/", addStockBatchController)
 
 router.delete("/:id", deleteStockBatchController)
 

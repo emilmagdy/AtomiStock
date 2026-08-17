@@ -16,7 +16,7 @@ router.get("/",
 router.get("/:id",
     getProductController)
 
-router.post("/add",
+router.post("/",
     tokenVerification,
     roleAutherization("ADMIN"),
     addProductController)
