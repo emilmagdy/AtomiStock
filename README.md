@@ -159,3 +159,51 @@ export const cancelOrdersController = async (req, res) => {
     })
 }
 ```
+# Application API Endpoints Reference
+
+Base URL: `/api/v1`
+
+---
+
+## 1. Authentication & Users (`/users`)
+
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| **`POST`** | `/users/register` | Public | Register a new customer account |
+| **`POST`** | `/users/login` | Public | Authenticate user and return JWT access token |
+| **`GET`** | `/users/profile` | Authenticated | Retrieve profile details of currently logged-in user |
+
+---
+
+## 2. Products (`/products`)
+
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| **`GET`** | `/products` | Public | List products with pagination and search |
+| **`GET`** | `/products/:id` | Public | Fetch single product details and overall stock availability |
+| **`POST`** | `/products` | Admin | Create a new product entry in the catalog |
+| **`PATCH`**| `/products/:id` | Admin | Update product information (price, description) |
+| **`DELETE`**| `/products/:id` | Admin | Soft delete or deactivate a product |
+
+---
+
+## 3. Stock & Inventory (`/stock-batches`)
+
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| **`GET`** | `/stock-batches/product/:productId` | Admin | View all active FIFO stock batches for a product |
+| **`POST`** | `/stock-batches` | Admin | Add a new stock batch for a product (`addedAt: now()`) |
+| **`PATCH`**| `/stock-batches/:id` | Admin | Adjust batch quantity or details manually |
+
+---
+
+## 4. Orders & Inventory Allocation (`/orders`)
+
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| **`POST`** | `/orders` | Customer | Create order with atomic FIFO batch deduction |
+| **`GET`** | `/orders` | Customer | Get paginated order history for logged-in user |
+| **`GET`** | `/orders/:id` | Customer / Admin | Fetch single order details with nested `orderItems` |
+| **`PATCH`**| `/orders/:id/cancel` | Customer / Admin | Soft-delete/cancel order and restore inventory batches |
+
+```
