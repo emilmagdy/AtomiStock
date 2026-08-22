@@ -1,6 +1,6 @@
 # E-Commerce & Inventory Management API
 
-A secure, high-performance RESTful backend service built with **Node.js**, **Express**, and **Prisma ORM** over **PostgreSQL**. 
+A secure,type-safe, high-performance RESTful backend service built with**Typescript** **Node.js**, **Express**, and **Prisma ORM** over **PostgreSQL**. 
 
 This system features a custom **FIFO (First-In, First-Out) batch inventory engine**, strict **ACID transactional safety**, precise **financial decimal modeling**, and robust **Insecure Direct Object Reference (IDOR)** safeguards.
 
@@ -100,63 +100,80 @@ npm install
 ### Run database migrations
 npx prisma migrate dev --name init
 
-### Generate Prisma Client
-npx prisma generate
+### Build the codebase and Generate prisma client
+npm run build
 
 ### Start the development server
-npm run dev
+npm start
 
 ## Key Implementation Highlights
 Order Cancellation & Batch Restoration Logic
 When a customer or admin cancels an order, the system handles the restoration atomically inside a single database transaction:
 
-```JavaScript
-export const cancelOrdersController = async (req, res) => {
-    const user = req.user
-    if (!user || !user.id) throw new AppError("Authorization required", 401)
+```Typescript
+import { Request, Response } from 'express'
+import { Prisma } from '@prisma/client'
+import prisma from '../config/prisma' 
+import { AppError } from '../utils/AppError' 
 
-    const orderId = Number(req.params.id)
-    if (!orderId || isNaN(orderId)) throw new AppError("Invalid ID parameter", 400)
+// Extend Express Request type inline if custom user object is not declared globally
+interface AuthenticatedRequest extends Request {
+  user?: {
+    id: number
+    role: string
+  }
+}
 
-    const result = await prisma.$transaction(async (tx) => {
-        const order = await tx.order.findUnique({
-            where: { id: orderId },
-            include: { orderItems: true }
-        })
+export const cancelOrdersController = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<Response> => {
+  const user = req.user
+  if (!user || !user.id) throw new AppError("Authorization required", 401)
 
-        if (!order) throw new AppError("Order not found", 404)
-        if (order.orderStatus !== "PENDING") throw new AppError("Order cannot be cancelled", 400)
-        if (order.userId !== user.id && user.role !== "ADMIN") throw new AppError("Unauthorized", 403)
+  const orderId = Number(req.params.id)
+  if (!orderId || isNaN(orderId)) throw new AppError("Invalid ID parameter", 400)
 
-        const stockBatchesData = []
-
-        for (const item of order.orderItems) {
-            await tx.product.update({
-                where: { id: item.productId },
-                data: { stockQuantity: { increment: item.quantity } }
-            })
-
-            stockBatchesData.push({
-                productId: item.productId,
-                quantity: item.quantity
-            })
-        }
-
-        const createdBatches = await tx.stockBatch.createMany({ data: stockBatchesData })
-
-        const cancelledOrder = await tx.order.update({
-            where: { id: orderId },
-            data: { orderStatus: "CANCELLED" }
-        })
-
-        return { createdBatches, cancelledOrder }
+  const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    const order = await tx.order.findUnique({
+      where: { id: orderId },
+      include: { orderItems: true }
     })
 
-    return res.status(200).json({
-        message: `Order ${orderId} cancelled successfully`,
-        cancelledOrder: result.cancelledOrder,
-        createdBatches: result.createdBatches
+    if (!order) throw new AppError("Order not found", 404)
+    if (order.orderStatus !== "PENDING") throw new AppError("Order cannot be cancelled", 400)
+    if (order.userId !== user.id && user.role !== "ADMIN") throw new AppError("Unauthorized", 403)
+
+    // Strictly type the batch array using Prisma's UncheckedCreateInput type for StockBatch
+    const stockBatchesData: Prisma.StockBatchUncheckedCreateInput[] = []
+
+    for (const item of order.orderItems) {
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { stockQuantity: { increment: item.quantity } }
+      })
+
+      stockBatchesData.push({
+        productId: item.productId,
+        quantity: item.quantity
+      })
+    }
+
+    const createdBatches = await tx.stockBatch.createMany({ data: stockBatchesData })
+
+    const cancelledOrder = await tx.order.update({
+      where: { id: orderId },
+      data: { orderStatus: "CANCELLED" }
     })
+
+    return { createdBatches, cancelledOrder }
+  })
+
+  return res.status(200).json({
+    message: `Order ${orderId} cancelled successfully`,
+    cancelledOrder: result.cancelledOrder,
+    createdBatches: result.createdBatches
+  })
 }
 ```
 # Application API Endpoints Reference
